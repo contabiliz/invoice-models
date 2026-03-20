@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "invoice-models"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov"]
+
+[tool.setuptools.package-dir]
+invoice_models = "src"
+
+[tool.setuptools]
+packages = ["invoice_models"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
