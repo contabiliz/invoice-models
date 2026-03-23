@@ -14,7 +14,7 @@ dev = ["pytest", "pytest-cov", "python-semantic-release"]
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
 branch = "main"
-commit_parser = "angular"
+commit_parser = "conventional"
 tag_format = "v{version}"
 
 [tool.setuptools.package-dir]
