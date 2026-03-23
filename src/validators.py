@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
@@ -98,9 +99,25 @@ CPF = Annotated[str, AfterValidator(_pydantic_cpf)]
 # BRL monetary value
 # ---------------------------------------------------------------------------
 
+_MOEDA_STRIP = re.compile(r"[R$\s]")
+_MOEDA_CLEAN = re.compile(r"[^\d,.]")
+
+
 def validate_moeda_brl(raw: str) -> ValidationResult:
+    cleaned = _MOEDA_STRIP.sub("", raw)
+    cleaned = _MOEDA_CLEAN.sub("", cleaned)
+    if not cleaned:
+        return ValidationResult(False, None, f"Cannot parse '{raw}' as a BRL decimal")
+    if "," in cleaned:
+        parts = cleaned.split(",")
+        if len(parts) != 2:
+            return ValidationResult(False, None, f"Cannot parse '{raw}' as a BRL decimal")
+        normalized = parts[0].replace(".", "") + "." + parts[1]
+    elif cleaned.count(".") == 1:
+        normalized = cleaned
+    else:
+        normalized = cleaned.replace(".", "")
     try:
-        normalized = raw.replace(".", "").replace(",", ".") if "," in raw else raw
         Decimal(normalized)
         return ValidationResult(True, normalized)
     except InvalidOperation:
@@ -127,15 +144,22 @@ BRLDecimal = Annotated[Decimal, BeforeValidator(_pydantic_brl)]
 # Date
 # ---------------------------------------------------------------------------
 
-_DATE_FORMATS = ("%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%y")
+_DATE_FORMATS = [
+    ("%d/%m/%Y", r"\d{2}/\d{2}/\d{4}"),
+    ("%d-%m-%Y", r"\d{2}-\d{2}-\d{4}"),
+    ("%Y-%m-%d", r"\d{4}-\d{2}-\d{2}"),
+    ("%d/%m/%y", r"\d{2}/\d{2}/\d{2}"),
+]
 
 
 def validate_data(raw: str) -> ValidationResult:
-    for fmt in _DATE_FORMATS:
-        try:
-            return ValidationResult(True, datetime.strptime(raw, fmt).strftime("%Y-%m-%d"))
-        except ValueError:
-            continue
+    for fmt, pattern in _DATE_FORMATS:
+        match = re.search(pattern, raw.strip())
+        if match:
+            try:
+                return ValidationResult(True, datetime.strptime(match.group(), fmt).strftime("%Y-%m-%d"))
+            except ValueError:
+                continue
     return ValidationResult(False, None, f"Cannot parse '{raw}' as a date (expected DD/MM/YYYY, DD-MM-YYYY, or YYYY-MM-DD)")
 
 
@@ -160,9 +184,10 @@ FlexibleDate = Annotated[date, BeforeValidator(_pydantic_date)]
 # ---------------------------------------------------------------------------
 
 def validate_texto_numerico_44(raw: str) -> ValidationResult:
-    if len(raw) == 44 and raw.isdigit():
-        return ValidationResult(True, raw)
-    return ValidationResult(False, None, f"chave_acesso must be exactly 44 digits, got '{raw}'")
+    digits = re.sub(r"\D", "", raw)
+    if len(digits) == 44:
+        return ValidationResult(True, digits)
+    return ValidationResult(False, None, f"chave_acesso must be exactly 44 digits, got {len(digits)}")
 
 
 ChaveAcesso = Annotated[str, Field(pattern=r"^\d{44}$")]
@@ -179,16 +204,19 @@ _VALID_UF = frozenset({
 })
 
 
+_CIDADE_UF_PATTERN = re.compile(
+    r"^(.+?)[\s/\-]+(" + "|".join(_VALID_UF) + r")$",
+    re.IGNORECASE,
+)
+
+
 def validate_cidade_uf(raw: str) -> ValidationResult:
-    parts = raw.rsplit("/", 1)
-    if len(parts) != 2:
+    match = _CIDADE_UF_PATTERN.match(raw.strip())
+    if not match:
         return ValidationResult(False, None, f"Expected format CIDADE/UF, got '{raw}'")
-    cidade, uf = parts[0].strip(), parts[1].strip().upper()
-    if not cidade:
-        return ValidationResult(False, None, "City name cannot be empty")
-    if uf not in _VALID_UF:
-        return ValidationResult(False, None, f"'{uf}' is not a valid UF code")
-    return ValidationResult(True, f"{cidade.upper()}/{uf}")
+    cidade = match.group(1).strip().upper()
+    uf = match.group(2).upper()
+    return ValidationResult(True, f"{cidade}/{uf}")
 
 
 def _pydantic_uf(v: str) -> str:
