@@ -21,7 +21,7 @@ tag_format = "v{version}"
 invoice_models = "src"
 
 [tool.setuptools]
-packages = ["invoice_models"]
+packages = ["invoice_models", "invoice_models.extraction", "invoice_models.api"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
