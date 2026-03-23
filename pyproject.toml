@@ -9,7 +9,13 @@ requires-python = ">=3.12"
 dependencies = ["pydantic>=2.0"]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-cov"]
+dev = ["pytest", "pytest-cov", "python-semantic-release"]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+commit_parser = "angular"
+tag_format = "v{version}"
 
 [tool.setuptools.package-dir]
 invoice_models = "src"
