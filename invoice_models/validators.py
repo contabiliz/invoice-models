@@ -204,25 +204,18 @@ _VALID_UF = frozenset({
 })
 
 
-_CIDADE_UF_PATTERN = re.compile(
-    r"^(.+?)[\s/\-]+(" + "|".join(_VALID_UF) + r")$",
-    re.IGNORECASE,
-)
-
-
-def validate_cidade_uf(raw: str) -> ValidationResult:
-    match = _CIDADE_UF_PATTERN.match(raw.strip())
-    if not match:
-        return ValidationResult(False, None, f"Expected format CIDADE/UF, got '{raw}'")
-    cidade = match.group(1).strip().upper()
-    uf = match.group(2).upper()
-    return ValidationResult(True, f"{cidade}/{uf}")
+def validate_uf(raw: str) -> ValidationResult:
+    normalized = raw.strip().upper()
+    if normalized in _VALID_UF:
+        return ValidationResult(True, normalized)
+    return ValidationResult(False, None, f"'{raw}' is not a valid Brazilian UF code")
 
 
 def _pydantic_uf(v: str) -> str:
-    if v not in _VALID_UF:
-        raise ValueError(f"'{v}' is not a valid Brazilian UF code")
-    return v
+    result = validate_uf(v)
+    if not result.ok:
+        raise ValueError(result.reason)
+    return result.normalized_value  # type: ignore[return-value]
 
 
 UFCode = Annotated[str, AfterValidator(_pydantic_uf)]

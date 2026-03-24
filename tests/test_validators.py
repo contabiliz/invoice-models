@@ -19,7 +19,7 @@ from invoice_models.validators import (
     validate_moeda_brl,
     validate_texto,
     validate_texto_numerico_44,
-    validate_cidade_uf,
+    validate_uf,
 )
 
 
@@ -265,20 +265,30 @@ def test_chave_acesso_invalid():
 
 
 # ---------------------------------------------------------------------------
-# validate_cidade_uf — standalone
+# validate_uf — standalone
 # ---------------------------------------------------------------------------
 
-def test_validate_cidade_uf_ok():
-    r = validate_cidade_uf("São Paulo/SP")
+def test_validate_uf_ok():
+    r = validate_uf("SP")
     assert r.ok
-    assert r.normalized_value == "SÃO PAULO/SP"
+    assert r.normalized_value == "SP"
 
-def test_validate_cidade_uf_invalid_uf():
-    r = validate_cidade_uf("Cidade/XX")
+def test_validate_uf_lowercase_normalized():
+    r = validate_uf("sp")
+    assert r.ok
+    assert r.normalized_value == "SP"
+
+def test_validate_uf_with_whitespace():
+    r = validate_uf("  RJ  ")
+    assert r.ok
+    assert r.normalized_value == "RJ"
+
+def test_validate_uf_invalid():
+    r = validate_uf("XX")
     assert not r.ok
 
-def test_validate_cidade_uf_no_slash():
-    r = validate_cidade_uf("SãoPaulo")
+def test_validate_uf_empty():
+    r = validate_uf("")
     assert not r.ok
 
 
@@ -293,9 +303,8 @@ def test_uf_invalid():
     with pytest.raises(ValidationError):
         _UF(v="XX")
 
-def test_uf_lowercase_rejected():
-    with pytest.raises(ValidationError):
-        _UF(v="sp")
+def test_uf_lowercase_normalized():
+    assert _UF(v="sp").v == "SP"
 
 
 # ---------------------------------------------------------------------------

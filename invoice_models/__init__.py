@@ -35,7 +35,7 @@ from .validators import (
     FlexibleDate,
     UFCode,
     ValidationResult,
-    validate_cidade_uf,
+    validate_uf,
     validate_cnpj,
     validate_cpf,
     validate_cpf_ou_cnpj,
@@ -59,7 +59,7 @@ __all__ = [
     "validate_moeda_brl",
     "validate_data",
     "validate_texto_numerico_44",
-    "validate_cidade_uf",
+    "validate_uf",
     "validate_texto",
     # validators — Annotated types
     "CNPJ",
