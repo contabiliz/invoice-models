@@ -20,6 +20,7 @@ class PdfExtractionResult(BaseModel):
     cnpj_emitente: FieldOutput
     documento_destinatario: FieldOutput
     nome_destinatario: FieldOutput
+    uf_destinatario: FieldOutput
     data_emissao: FieldOutput
     valor_total_nota: FieldOutput
     numero_nota: FieldOutput
