@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.3.0 (2026-03-24)
+
+### Features
+
+- Replace validate_cidade_uf with validate_uf
+  ([`f7c1f73`](https://github.com/contabiliz/invoice-models/commit/f7c1f73a73378a696001e5bd5626a28aa5da02e5))
+
+
 ## v1.2.0 (2026-03-24)
 
 ### Features
