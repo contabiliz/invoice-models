@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.4.0 (2026-03-24)
+
+### Bug Fixes
+
+- Add uf_destinatario on tests
+  ([`8964388`](https://github.com/contabiliz/invoice-models/commit/89643882421dce2a93401cc7d0386e9c5a827178))
+
+### Features
+
+- Add uf_destinario into pdf extraction
+  ([`9e428ca`](https://github.com/contabiliz/invoice-models/commit/9e428ca5adcbe2c9e7205ca4fe29b655042a35c2))
+
+
 ## v1.3.0 (2026-03-24)
 
 ### Features
