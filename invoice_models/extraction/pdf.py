@@ -18,7 +18,6 @@ class PdfLineItem(BaseModel):
 class PdfExtractionResult(BaseModel):
     chave_acesso: FieldOutput
     cnpj_emitente: FieldOutput
-    nome_emitente: FieldOutput
     documento_destinatario: FieldOutput
     nome_destinatario: FieldOutput
     data_emissao: FieldOutput
