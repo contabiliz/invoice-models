@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.0 (2026-03-24)
+
+### Features
+
+- Remove nome_emitente from PdfExtractionResult
+  ([`34dec74`](https://github.com/contabiliz/invoice-models/commit/34dec74b436747e4ca9f8fdf90173919a6b212a9))
+
+
 ## v1.1.0 (2026-03-24)
 
 ### Features
