@@ -7,7 +7,7 @@ from .api import (
     DocumentPresignUrl,
     DocumentStatusItem,
 )
-from .db import Batch, Document, User
+from .db import Batch, Document, Entidade, Invoice, InvoiceItem, User
 from .enums import BatchStatus, DocType, DocumentStatus, MimeType
 from .extraction import (
     FieldOutput,
@@ -68,10 +68,14 @@ __all__ = [
     "FlexibleDate",
     "ChaveAcesso",
     "UFCode",
-    # db
+    # db — pipeline
     "User",
     "Batch",
     "Document",
+    # db — analytics
+    "Entidade",
+    "Invoice",
+    "InvoiceItem",
     # api
     "DocumentMetadata",
     "BatchPresignRequest",

@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import date, datetime
+from decimal import Decimal
 from typing import Any, ClassVar
 from uuid import UUID
 
@@ -47,3 +48,46 @@ class Document(BaseModel):
     updated_at: datetime
     processing_started_at: datetime | None = None
     completed_at: datetime | None = None
+    promoted_at: datetime | None = None
+
+
+class Entidade(BaseModel):
+    model_config: ClassVar[ConfigDict] = ConfigDict(from_attributes=True)
+
+    documento: str
+    nome: str
+    created_at: datetime
+
+
+class Invoice(BaseModel):
+    model_config: ClassVar[ConfigDict] = ConfigDict(from_attributes=True)
+
+    chave_acesso: str
+    document_id: UUID
+    user_id: UUID
+    cnpj_emitente: str
+    documento_destinatario: str
+    data_emissao: date
+    numero_nota: str
+    serie: str
+    valor_total: Decimal
+    doc_type: DocType
+    confidence: int | None = None
+    created_at: datetime
+
+
+class InvoiceItem(BaseModel):
+    model_config: ClassVar[ConfigDict] = ConfigDict(from_attributes=True)
+
+    id: int
+    chave_acesso: str
+    user_id: UUID
+    numero_item: int
+    codigo_produto: str
+    descricao: str
+    ncm: str
+    cfop: str
+    unidade: str
+    quantidade: Decimal | None = None
+    valor_unitario: Decimal | None = None
+    valor_total_item: Decimal | None = None
