@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.1.0 (2026-03-24)
+
+### Features
+
+- Add promoted_at to Document and analytics db models
+  ([`2786a1b`](https://github.com/contabiliz/invoice-models/commit/2786a1bb6f0bc928223fa89e7d436892a6f7fb08))
+
+
 ## v1.0.2 (2026-03-23)
 
 ### Bug Fixes
