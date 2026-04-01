@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.1 (2026-04-01)
+
+### Bug Fixes
+
+- Remove new_cfop from extraction models
+  ([`fd6e0e2`](https://github.com/contabiliz/invoice-models/commit/fd6e0e2467d2c7d1da30cbaa3889b6410be1d753))
+
+
 ## v1.5.0 (2026-04-01)
 
 ### Features
