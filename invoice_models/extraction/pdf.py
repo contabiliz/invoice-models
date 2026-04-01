@@ -12,7 +12,6 @@ class PdfLineItem(BaseModel):
     valor_unitario: Decimal | None = None
     valor_total_item: Decimal | None = None
     cst_csosn: str | None = None
-    new_cfop: str | None = None
     cfop: str | None = None
     ncm: str | None = None
 

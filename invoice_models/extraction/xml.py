@@ -22,7 +22,6 @@ class NfeLineItem(BaseModel):
     ncm: str
     cfop: str
     cst_csosn: str
-    new_cfop: str
 
 
 class NfeXmlResult(BaseModel):
