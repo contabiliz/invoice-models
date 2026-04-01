@@ -3,7 +3,12 @@ from decimal import Decimal
 
 from pydantic import BaseModel, field_validator
 
-from ..validators import validate_cnpj, validate_cpf_ou_cnpj, validate_data, validate_texto_numerico_44
+from ..validators import (
+    validate_cnpj,
+    validate_cpf_ou_cnpj,
+    validate_data,
+    validate_texto_numerico_44,
+)
 
 
 class NfeLineItem(BaseModel):
@@ -16,6 +21,8 @@ class NfeLineItem(BaseModel):
     valor_total_item: Decimal
     ncm: str
     cfop: str
+    cst_csosn: str
+    new_cfop: str
 
 
 class NfeXmlResult(BaseModel):
@@ -64,5 +71,6 @@ class NfeXmlResult(BaseModel):
             if not result.ok:
                 raise ValueError(result.reason)
             from datetime import datetime
+
             return datetime.strptime(result.normalized_value, "%Y-%m-%d").date()  # type: ignore[arg-type]
         raise ValueError(f"Cannot convert {type(v).__name__} to date")
