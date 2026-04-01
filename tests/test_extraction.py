@@ -27,12 +27,25 @@ _VALID_CPF = "52998224725"
 # FieldOutput
 # ---------------------------------------------------------------------------
 
+
 def test_field_output_found():
-    f = FieldOutput(value="11.222.333/0001-81", confidence=0.95, method="ngram", raw_text="11222333000181")
+    f = FieldOutput(
+        value="11.222.333/0001-81",
+        confidence=0.95,
+        method="ngram",
+        raw_text="11222333000181",
+    )
     assert f.errors == []
 
+
 def test_field_output_not_found():
-    f = FieldOutput(value=None, confidence=0.0, method="ngram", raw_text=None, errors=["label not detected"])
+    f = FieldOutput(
+        value=None,
+        confidence=0.0,
+        method="ngram",
+        raw_text=None,
+        errors=["label not detected"],
+    )
     assert f.value is None
     assert len(f.errors) == 1
 
@@ -40,6 +53,7 @@ def test_field_output_not_found():
 # ---------------------------------------------------------------------------
 # NfeXmlResult
 # ---------------------------------------------------------------------------
+
 
 def _nfe(**overrides):
     defaults = dict(
@@ -95,6 +109,8 @@ def test_nfe_xml_result_with_items():
         valor_total_item=Decimal("21.00"),
         ncm="12345678",
         cfop="5102",
+        cst_csosn="000",
+        new_cfop="1102",
     )
     r = _nfe(items=[item])
     assert len(r.items) == 1
@@ -104,15 +120,17 @@ def test_nfe_xml_result_with_items():
 # PdfExtractionResult
 # ---------------------------------------------------------------------------
 
+
 def _field(value=None, confidence=0.9, method="ngram"):
-    return FieldOutput(value=value, confidence=confidence, method=method, raw_text=value)
+    return FieldOutput(
+        value=value, confidence=confidence, method=method, raw_text=value
+    )
 
 
 def test_pdf_extraction_result_valid():
     r = PdfExtractionResult(
         chave_acesso=_field(_VALID_CHAVE),
         cnpj_emitente=_field(_VALID_CNPJ_FORMATTED),
-        nome_emitente=_field("Empresa"),
         documento_destinatario=_field(_VALID_CPF),
         nome_destinatario=_field("Cliente"),
         uf_destinatario=_field("SP"),
@@ -128,11 +146,14 @@ def test_pdf_extraction_result_valid():
 
 
 def test_pdf_extraction_result_with_line_item():
-    item = PdfLineItem(descricao="Produto A", quantidade=Decimal("2"), valor_total_item=Decimal("20.00"))
+    item = PdfLineItem(
+        descricao="Produto A",
+        quantidade=Decimal("2"),
+        valor_total_item=Decimal("20.00"),
+    )
     r = PdfExtractionResult(
         chave_acesso=_field(),
         cnpj_emitente=_field(),
-        nome_emitente=_field(),
         documento_destinatario=_field(),
         nome_destinatario=_field(),
         uf_destinatario=_field(),
@@ -150,6 +171,7 @@ def test_pdf_extraction_result_with_line_item():
 # ---------------------------------------------------------------------------
 # ImageExtractionResult
 # ---------------------------------------------------------------------------
+
 
 def test_image_extraction_result_all_none():
     r = ImageExtractionResult()
@@ -214,7 +236,13 @@ def test_image_extraction_result_valor_invalid():
 
 def test_image_extraction_result_with_items():
     r = ImageExtractionResult(
-        items=[ImageLineItem(descricao="Produto A", quantidade=Decimal("1"), valor_total=Decimal("10.00"))]
+        items=[
+            ImageLineItem(
+                descricao="Produto A",
+                quantidade=Decimal("1"),
+                valor_total=Decimal("10.00"),
+            )
+        ]
     )
     assert len(r.items) == 1
 
@@ -222,6 +250,7 @@ def test_image_extraction_result_with_items():
 # ---------------------------------------------------------------------------
 # ProcessorResult
 # ---------------------------------------------------------------------------
+
 
 def test_processor_result_success():
     r = ProcessorResult(result=_nfe())
