@@ -110,7 +110,6 @@ def test_nfe_xml_result_with_items():
         ncm="12345678",
         cfop="5102",
         cst_csosn="000",
-        new_cfop="1102",
     )
     r = _nfe(items=[item])
     assert len(r.items) == 1
