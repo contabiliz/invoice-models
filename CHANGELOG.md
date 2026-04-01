@@ -2,6 +2,20 @@
 
 <!-- version list -->
 
+## v1.5.0 (2026-04-01)
+
+### Features
+
+- Add new fields to entidade and split invoice registry, also add new values to invoiceItem
+  ([`5d84c13`](https://github.com/contabiliz/invoice-models/commit/5d84c13a634ea5bf04651b2cc716fa56b5706ac5))
+
+- Add new values to items
+  ([`6fb7060`](https://github.com/contabiliz/invoice-models/commit/6fb70606130404a0795d82c8cdbb98c51f97efef))
+
+- Add new values to tests
+  ([`0f76f1c`](https://github.com/contabiliz/invoice-models/commit/0f76f1c4654401ce78db8c7ac69e79f0cacba5b6))
+
+
 ## v1.4.0 (2026-03-24)
 
 ### Bug Fixes
