@@ -54,8 +54,12 @@ class Document(BaseModel):
 class Entidade(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(from_attributes=True)
 
+    # CNPJ only
     documento: str
     nome: str
+    uf: str
+    cnae_fiscal: str
+    cnae_fiscal_descricao: str
     created_at: datetime
 
 
@@ -65,8 +69,12 @@ class Invoice(BaseModel):
     chave_acesso: str
     document_id: UUID
     user_id: UUID
+    # Emitente is always a company
     cnpj_emitente: str
-    documento_destinatario: str
+    # Destinatário is a company or individual
+    destinatario_cpf: str | None = None
+    destinatario_cnpj: str | None = None
+    destinatario_nome: str
     data_emissao: date
     numero_nota: str
     serie: str
@@ -87,6 +95,8 @@ class InvoiceItem(BaseModel):
     descricao: str
     ncm: str
     cfop: str
+    cst_csosn: str
+    new_cfop: str
     unidade: str
     quantidade: Decimal | None = None
     valor_unitario: Decimal | None = None
