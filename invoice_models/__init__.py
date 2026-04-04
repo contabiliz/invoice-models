@@ -6,6 +6,7 @@ from .api import (
     DocumentMetadata,
     DocumentPresignUrl,
     DocumentStatusItem,
+    DocumentDetailResponse,
 )
 from .db import Batch, Document, Entidade, Invoice, InvoiceItem, User
 from .enums import BatchStatus, DocType, DocumentStatus, MimeType
@@ -84,6 +85,7 @@ __all__ = [
     "BatchStatusResponse",
     "DocumentStatusItem",
     "DocumentListResponse",
+    "DocumentDetailResponse",
     # tasks
     "UploadConfirmationNotification",
     "BaseTaskPayload",

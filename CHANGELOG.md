@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v1.6.1 (2026-04-04)
+
+### Bug Fixes
+
+- Add new DocumentDetail to exports
+  ([`0ef6c62`](https://github.com/contabiliz/invoice-models/commit/0ef6c62609ec09e459f9071a5b2cc6380437d4ea))
+
+
+## v1.6.0 (2026-04-04)
+
+### Features
+
+- Add DocumentDetails for unique document reading
+  ([`00c5b56`](https://github.com/contabiliz/invoice-models/commit/00c5b56f7fc7d08b236a07579add55998f635c2c))
+
+
 ## v1.5.1 (2026-04-01)
 
 ### Bug Fixes
