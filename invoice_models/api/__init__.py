@@ -5,7 +5,7 @@ from .batches import (
     DocumentMetadata,
     DocumentPresignUrl,
 )
-from .documents import DocumentListResponse, DocumentStatusItem
+from .documents import DocumentListResponse, DocumentStatusItem, DocumentDetailResponse
 
 __all__ = [
     "DocumentMetadata",
@@ -15,4 +15,5 @@ __all__ = [
     "BatchStatusResponse",
     "DocumentStatusItem",
     "DocumentListResponse",
+    "DocumentDetailResponse",
 ]
