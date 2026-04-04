@@ -1,9 +1,4 @@
 from .api import (
-    AnalyticsDocumentBreakdown,
-    AnalyticsDocumentBreakdownList,
-    AnalyticsKPIResponse,
-    AnalyticsTimeSeriesPoint,
-    AnalyticsTimeSeriesResponse,
     BatchPresignRequest,
     BatchPresignResponse,
     BatchStatusResponse,
@@ -81,13 +76,7 @@ __all__ = [
     "Entidade",
     "Invoice",
     "InvoiceItem",
-    # api — analytics
-    "AnalyticsKPIResponse",
-    "AnalyticsTimeSeriesPoint",
-    "AnalyticsTimeSeriesResponse",
-    "AnalyticsDocumentBreakdown",
-    "AnalyticsDocumentBreakdownList",
-    # api — batches & documents
+    # api
     "DocumentMetadata",
     "BatchPresignRequest",
     "DocumentPresignUrl",
