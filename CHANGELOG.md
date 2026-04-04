@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.6.0 (2026-04-04)
+
+### Features
+
+- Add DocumentDetails for unique document reading
+  ([`00c5b56`](https://github.com/contabiliz/invoice-models/commit/00c5b56f7fc7d08b236a07579add55998f635c2c))
+
+
 ## v1.5.1 (2026-04-01)
 
 ### Bug Fixes
