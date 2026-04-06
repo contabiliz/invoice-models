@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.8.0 (2026-04-06)
+
+### Features
+
+- Add new serie validator
+  ([`5b79273`](https://github.com/contabiliz/invoice-models/commit/5b79273be45cc7fc3309a33245b9702604a0212f))
+
+
 ## v1.7.0 (2026-04-04)
 
 
