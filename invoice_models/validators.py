@@ -12,6 +12,7 @@ from pydantic import AfterValidator, BeforeValidator, Field
 # Used directly by invoice-processors during candidate scoring.
 # ---------------------------------------------------------------------------
 
+
 @dataclass(frozen=True)
 class ValidationResult:
     ok: bool
@@ -30,7 +31,9 @@ _CNPJ_WEIGHTS_2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
 def validate_cnpj(raw: str) -> ValidationResult:
     digits = "".join(c for c in raw if c.isdigit())
     if len(digits) != 14:
-        return ValidationResult(False, None, f"CNPJ must have 14 digits, got {len(digits)}")
+        return ValidationResult(
+            False, None, f"CNPJ must have 14 digits, got {len(digits)}"
+        )
     if len(set(digits)) == 1:
         return ValidationResult(False, None, "CNPJ cannot be all the same digit")
     for weights, pos in [(_CNPJ_WEIGHTS_1, 12), (_CNPJ_WEIGHTS_2, 13)]:
@@ -38,8 +41,12 @@ def validate_cnpj(raw: str) -> ValidationResult:
         r = total % 11
         expected = 0 if r < 2 else 11 - r
         if expected != int(digits[pos]):
-            return ValidationResult(False, None, f"CNPJ check digit {pos - 11} is invalid")
-    normalized = f"{digits[:2]}.{digits[2:5]}.{digits[5:8]}/{digits[8:12]}-{digits[12:]}"
+            return ValidationResult(
+                False, None, f"CNPJ check digit {pos - 11} is invalid"
+            )
+    normalized = (
+        f"{digits[:2]}.{digits[2:5]}.{digits[5:8]}/{digits[8:12]}-{digits[12:]}"
+    )
     return ValidationResult(True, normalized)
 
 
@@ -64,7 +71,9 @@ _CPF_WEIGHTS_2 = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
 def validate_cpf(raw: str) -> ValidationResult:
     digits = "".join(c for c in raw if c.isdigit())
     if len(digits) != 11:
-        return ValidationResult(False, None, f"CPF must have 11 digits, got {len(digits)}")
+        return ValidationResult(
+            False, None, f"CPF must have 11 digits, got {len(digits)}"
+        )
     if len(set(digits)) == 1:
         return ValidationResult(False, None, "CPF cannot be all the same digit")
     for weights, pos in [(_CPF_WEIGHTS_1, 9), (_CPF_WEIGHTS_2, 10)]:
@@ -72,7 +81,9 @@ def validate_cpf(raw: str) -> ValidationResult:
         r = total % 11
         expected = 0 if r < 2 else 11 - r
         if expected != int(digits[pos]):
-            return ValidationResult(False, None, f"CPF check digit {pos - 8} is invalid")
+            return ValidationResult(
+                False, None, f"CPF check digit {pos - 8} is invalid"
+            )
     return ValidationResult(True, digits)
 
 
@@ -82,7 +93,9 @@ def validate_cpf_ou_cnpj(raw: str) -> ValidationResult:
         return validate_cnpj(raw)
     if len(digits) == 11:
         return validate_cpf(raw)
-    return ValidationResult(False, None, f"Expected 11 (CPF) or 14 (CNPJ) digits, got {len(digits)}")
+    return ValidationResult(
+        False, None, f"Expected 11 (CPF) or 14 (CNPJ) digits, got {len(digits)}"
+    )
 
 
 def _pydantic_cpf(v: str) -> str:
@@ -111,7 +124,9 @@ def validate_moeda_brl(raw: str) -> ValidationResult:
     if "," in cleaned:
         parts = cleaned.split(",")
         if len(parts) != 2:
-            return ValidationResult(False, None, f"Cannot parse '{raw}' as a BRL decimal")
+            return ValidationResult(
+                False, None, f"Cannot parse '{raw}' as a BRL decimal"
+            )
         normalized = parts[0].replace(".", "") + "." + parts[1]
     elif cleaned.count(".") == 1:
         normalized = cleaned
@@ -157,10 +172,16 @@ def validate_data(raw: str) -> ValidationResult:
         match = re.search(pattern, raw.strip())
         if match:
             try:
-                return ValidationResult(True, datetime.strptime(match.group(), fmt).strftime("%Y-%m-%d"))
+                return ValidationResult(
+                    True, datetime.strptime(match.group(), fmt).strftime("%Y-%m-%d")
+                )
             except ValueError:
                 continue
-    return ValidationResult(False, None, f"Cannot parse '{raw}' as a date (expected DD/MM/YYYY, DD-MM-YYYY, or YYYY-MM-DD)")
+    return ValidationResult(
+        False,
+        None,
+        f"Cannot parse '{raw}' as a date (expected DD/MM/YYYY, DD-MM-YYYY, or YYYY-MM-DD)",
+    )
 
 
 def _pydantic_date(value: object) -> date:
@@ -183,11 +204,14 @@ FlexibleDate = Annotated[date, BeforeValidator(_pydantic_date)]
 # Chave de acesso — exactly 44 digits
 # ---------------------------------------------------------------------------
 
+
 def validate_texto_numerico_44(raw: str) -> ValidationResult:
     digits = re.sub(r"\D", "", raw)
     if len(digits) == 44:
         return ValidationResult(True, digits)
-    return ValidationResult(False, None, f"chave_acesso must be exactly 44 digits, got {len(digits)}")
+    return ValidationResult(
+        False, None, f"chave_acesso must be exactly 44 digits, got {len(digits)}"
+    )
 
 
 ChaveAcesso = Annotated[str, Field(pattern=r"^\d{44}$")]
@@ -197,11 +221,37 @@ ChaveAcesso = Annotated[str, Field(pattern=r"^\d{44}$")]
 # UF code — Brazilian state abbreviation
 # ---------------------------------------------------------------------------
 
-_VALID_UF = frozenset({
-    "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO",
-    "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
-    "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
-})
+_VALID_UF = frozenset(
+    {
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO",
+    }
+)
 
 
 def validate_uf(raw: str) -> ValidationResult:
@@ -220,10 +270,34 @@ def _pydantic_uf(v: str) -> str:
 
 UFCode = Annotated[str, AfterValidator(_pydantic_uf)]
 
+# ---------------------------------------------------------------------------
+# SERIE — NF-e série, 1–3 numeric digits (e.g. "1", "002")
+# ---------------------------------------------------------------------------
+
+_SERIE_RE = re.compile(r"^\d{1,3}$")
+
+
+def validate_serie(raw: str) -> ValidationResult:
+    normalized = raw.strip()
+    if _SERIE_RE.match(normalized):
+        return ValidationResult(True, normalized)
+    return ValidationResult(False, None, f"Invalid serie: {raw!r}")
+
+
+def _pydantic_serie(v: str) -> str:
+    result = validate_serie(v)
+    if not result.ok:
+        raise ValueError(result.reason)
+    return result.normalized_value  # type: ignore[return-value]
+
+
+SERIE = Annotated[str, AfterValidator(_pydantic_serie)]
+
 
 # ---------------------------------------------------------------------------
 # Texto — non-empty, whitespace-normalized
 # ---------------------------------------------------------------------------
+
 
 def validate_texto(raw: str) -> ValidationResult:
     normalized = " ".join(raw.split())

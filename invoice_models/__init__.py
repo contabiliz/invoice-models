@@ -36,6 +36,7 @@ from .validators import (
     FlexibleDate,
     UFCode,
     ValidationResult,
+    SERIE,
     validate_uf,
     validate_cnpj,
     validate_cpf,
@@ -44,6 +45,7 @@ from .validators import (
     validate_moeda_brl,
     validate_texto,
     validate_texto_numerico_44,
+    validate_serie,
 )
 
 __all__ = [
@@ -62,6 +64,7 @@ __all__ = [
     "validate_texto_numerico_44",
     "validate_uf",
     "validate_texto",
+    "validate_serie",
     # validators — Annotated types
     "CNPJ",
     "CPF",
@@ -69,6 +72,7 @@ __all__ = [
     "FlexibleDate",
     "ChaveAcesso",
     "UFCode",
+    "SERIE",
     # db — pipeline
     "User",
     "Batch",
