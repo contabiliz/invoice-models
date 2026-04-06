@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.9.0 (2026-04-06)
+
+### Features
+
+- Add numero nota validator
+  ([`56de590`](https://github.com/contabiliz/invoice-models/commit/56de590573c9c06a6c8872343f45aff3c8efedcf))
+
+
 ## v1.8.0 (2026-04-06)
 
 ### Features
