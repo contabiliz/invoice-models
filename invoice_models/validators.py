@@ -271,6 +271,32 @@ def _pydantic_uf(v: str) -> str:
 UFCode = Annotated[str, AfterValidator(_pydantic_uf)]
 
 # ---------------------------------------------------------------------------
+# Numero da nota — NF-e NNF, exactly 9 numeric digits (e.g. "006591276")
+# ---------------------------------------------------------------------------
+
+_NUMERO_NOTA_RE = re.compile(r"^\d{9}$")
+
+
+def validate_numero_nota(raw: str) -> ValidationResult:
+    digits = "".join(c for c in raw if c.isdigit())
+    if _NUMERO_NOTA_RE.match(digits):
+        return ValidationResult(True, digits)
+    return ValidationResult(
+        False, None, f"numero_nota must be exactly 9 digits, got {len(digits)}"
+    )
+
+
+def _pydantic_numero_nota(v: str) -> str:
+    result = validate_numero_nota(v)
+    if not result.ok:
+        raise ValueError(result.reason)
+    return result.normalized_value  # type: ignore[return-value]
+
+
+NumeroNota = Annotated[str, AfterValidator(_pydantic_numero_nota)]
+
+
+# ---------------------------------------------------------------------------
 # SERIE — NF-e série, 1–3 numeric digits (e.g. "1", "002")
 # ---------------------------------------------------------------------------
 

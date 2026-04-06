@@ -7,6 +7,7 @@ from pydantic import BaseModel, ValidationError
 from invoice_models.validators import (
     CNPJ,
     CPF,
+    NumeroNota,
     SERIE,
     BRLDecimal,
     ChaveAcesso,
@@ -18,6 +19,7 @@ from invoice_models.validators import (
     validate_cpf_ou_cnpj,
     validate_data,
     validate_moeda_brl,
+    validate_numero_nota,
     validate_serie,
     validate_texto,
     validate_texto_numerico_44,
@@ -56,6 +58,10 @@ class _UF(BaseModel):
 
 class _SERIE(BaseModel):
     v: SERIE
+
+
+class _NumeroNota(BaseModel):
+    v: NumeroNota
 
 
 _VALID_CNPJ_BARE = "11222333000181"
@@ -369,6 +375,66 @@ def test_uf_lowercase_normalized():
 # ---------------------------------------------------------------------------
 # validate_texto — standalone
 # ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# validate_numero_nota — standalone
+# ---------------------------------------------------------------------------
+
+
+def test_validate_numero_nota_ok():
+    r = validate_numero_nota("006591276")
+    assert r.ok
+    assert r.normalized_value == "006591276"
+
+
+def test_validate_numero_nota_strips_formatting():
+    r = validate_numero_nota("006.591.276")
+    assert r.ok
+    assert r.normalized_value == "006591276"
+
+
+def test_validate_numero_nota_eight_digits_rejected():
+    r = validate_numero_nota("12345678")
+    assert not r.ok
+
+
+def test_validate_numero_nota_ten_digits_rejected():
+    r = validate_numero_nota("1234567890")
+    assert not r.ok
+
+
+def test_validate_numero_nota_empty_rejected():
+    r = validate_numero_nota("")
+    assert not r.ok
+
+
+def test_validate_numero_nota_non_numeric_rejected():
+    r = validate_numero_nota("ABCDEFGHI")
+    assert not r.ok
+
+
+# ---------------------------------------------------------------------------
+# NumeroNota — Annotated type
+# ---------------------------------------------------------------------------
+
+
+def test_numero_nota_annotated_ok():
+    assert _NumeroNota(v="006591276").v == "006591276"
+
+
+def test_numero_nota_annotated_strips_formatting():
+    assert _NumeroNota(v="006.591.276").v == "006591276"
+
+
+def test_numero_nota_annotated_wrong_length_rejected():
+    with pytest.raises(ValidationError):
+        _NumeroNota(v="12345678")
+
+
+def test_numero_nota_annotated_non_numeric_rejected():
+    with pytest.raises(ValidationError):
+        _NumeroNota(v="ABCDEFGHI")
 
 
 # ---------------------------------------------------------------------------
